@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+*.log
+.DS_Store
+
+# per-route smoke screenshots are committed; dev-* are scratch
+# iteration shots from tools/devshot.mjs
+screenshots/dev-*.png

@@ -1,0 +1,633 @@
+/* ————————————————— campaign map (cm-) + fleet museum (mu-) ————————————————— */
+
+.cm {
+  display: flex;
+  height: 100%;
+}
+
+/* ————— altitude chart ————— */
+.cm-chart {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, var(--bp-grid-major) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, var(--bp-grid-major) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(0deg, var(--bp-grid-minor) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, var(--bp-grid-minor) 0 1px, transparent 1px 8px);
+}
+.cm-svg {
+  display: block;
+}
+
+.cm-grid {
+  stroke: var(--line-1);
+  stroke-width: 1;
+  stroke-dasharray: 1 5;
+}
+.cm-axis {
+  stroke: var(--line-2);
+  stroke-width: 1;
+}
+.cm-tick {
+  stroke: var(--line-2);
+  stroke-width: 1;
+}
+.cm-tick-label {
+  fill: var(--text-3);
+  font-size: 10px;
+}
+.cm-axis-title {
+  fill: var(--text-3);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.cm-karman {
+  stroke: var(--line-2);
+  stroke-width: 1;
+  stroke-dasharray: 10 6;
+}
+.cm-karman-label {
+  fill: var(--text-3);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+}
+
+.cm-best {
+  stroke: var(--accent-line);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+.cm-best-label {
+  fill: var(--accent);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+}
+
+/* trajectory curve */
+.cm-traj {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  opacity: 0.95;
+}
+.cm-traj-glow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 7;
+  opacity: 0.14;
+  filter: blur(4px);
+}
+.cm-traj-ahead {
+  fill: none;
+  stroke: var(--line-2);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+/* ————— mission nodes ————— */
+.cm-node {
+  cursor: pointer;
+}
+.cm-node__hit {
+  fill: transparent;
+}
+.cm-node__ring {
+  fill: var(--bg-0);
+  stroke-width: 1.5;
+  transition: stroke-width 120ms;
+}
+.cm-node:hover .cm-node__ring {
+  stroke-width: 2.5;
+}
+.cm-node__core {
+  pointer-events: none;
+}
+.cm-node__sel {
+  fill: none;
+  stroke: var(--accent-line);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.cm-node--done .cm-node__ring {
+  stroke: var(--ok);
+}
+.cm-node--done .cm-node__core {
+  fill: var(--ok);
+}
+.cm-node--done .cm-node__state {
+  fill: var(--ok);
+  opacity: 0.85;
+}
+
+.cm-node--avail .cm-node__ring {
+  stroke: var(--accent);
+}
+.cm-node--avail .cm-node__core {
+  fill: var(--accent);
+}
+.cm-node--avail .cm-node__state {
+  fill: var(--accent);
+}
+
+.cm-node--locked .cm-node__ring {
+  stroke: var(--text-3);
+  stroke-dasharray: 3 3;
+  opacity: 0.55;
+}
+.cm-node--locked .cm-node__core {
+  fill: var(--text-3);
+  opacity: 0.4;
+}
+.cm-node--locked .cm-node__index,
+.cm-node--locked .cm-node__title,
+.cm-node--locked .cm-node__state {
+  opacity: 0.5;
+}
+
+.cm-node--free .cm-node__ring {
+  stroke: var(--text-2);
+}
+.cm-node--free .cm-node__core {
+  fill: var(--text-2);
+}
+.cm-node--free .cm-node__title {
+  fill: var(--text-2);
+}
+
+.cm-node__index {
+  fill: var(--text-3);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.cm-node__title {
+  fill: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+}
+.cm-node__state {
+  fill: var(--text-3);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+
+.cm-node__pulse {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cm-ping 2.4s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+@keyframes cm-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ————— dossier panel ————— */
+.cm-dossier {
+  width: 404px;
+  flex: none;
+  border-left: 1px solid var(--line-1);
+  background: var(--bg-1);
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+}
+.cm-dossier__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sp-6) var(--sp-6) var(--sp-5);
+}
+.cm-dossier__kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.16em;
+  color: var(--text-3);
+}
+.cm-badge {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  color: var(--text-3);
+}
+.cm-badge--avail {
+  border-color: var(--accent-line);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.cm-badge--done {
+  border-color: var(--ok);
+  color: var(--ok);
+  background: var(--ok-dim);
+}
+.cm-dossier__index {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+.cm-dossier__title {
+  margin: 2px 0 0;
+  font-size: var(--fs-2xl);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.cm-dossier__tagline {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--text-2);
+}
+
+.cm-dossier__stats {
+  display: flex;
+  gap: var(--sp-6);
+  margin-top: var(--sp-5);
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--line-1);
+  border-bottom: 1px solid var(--line-1);
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+}
+.cm-stat-label {
+  display: block;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  margin-bottom: 1px;
+}
+
+.cm-dossier__memo {
+  margin-top: var(--sp-5);
+}
+.cm-dossier__memo .md-p {
+  margin: 0 0 0.85em;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.cm-dossier__memo .md-p strong {
+  color: var(--text-1);
+  font-weight: 600;
+}
+.cm-dossier__sealed {
+  margin-top: var(--sp-5);
+  padding: var(--sp-4);
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-2);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text-3);
+}
+.cm-dossier__sealed b {
+  color: var(--text-2);
+}
+
+.cm-section {
+  margin-top: var(--sp-6);
+}
+.cm-section__head {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.16em;
+  color: var(--text-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--line-1);
+  margin-bottom: var(--sp-3);
+}
+
+.cm-objectives {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cm-obj {
+  display: flex;
+  gap: var(--sp-3);
+  padding: 3px 0;
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+.cm-obj__tick {
+  color: var(--text-3);
+  width: 12px;
+  flex: none;
+}
+.cm-obj--done {
+  color: var(--text-1);
+}
+.cm-obj--done .cm-obj__tick {
+  color: var(--ok);
+}
+
+.cm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.cm-chip {
+  border: 1px solid var(--accent-line);
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: box-shadow 120ms;
+}
+.cm-chip:hover {
+  box-shadow: var(--accent-glow);
+}
+.cm-chip--locked {
+  border-color: var(--line-1);
+  background: transparent;
+  color: var(--text-3);
+  cursor: default;
+}
+.cm-chip--locked:hover {
+  box-shadow: none;
+}
+
+.cm-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.cm-features li {
+  padding: 2px 0;
+}
+.cm-features li::before {
+  content: '+ ';
+  color: var(--accent);
+}
+
+.cm-complete__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--text-1);
+}
+.cm-complete__epitaph {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.cm-dossier__cta {
+  flex: none;
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6);
+  border-top: 1px solid var(--line-1);
+  background: var(--bg-1);
+}
+.cm-dossier__cta .ms-btn {
+  flex: 1;
+  letter-spacing: 0.08em;
+  font-size: var(--fs-xs);
+  padding: var(--sp-3) var(--sp-4);
+}
+.cm-lock-note {
+  flex: 1;
+  text-align: center;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  padding: var(--sp-3) 0;
+}
+
+/* titlebar nav + statusbar numerals (shared by all three views) */
+.cm-nav {
+  display: flex;
+  gap: var(--sp-2);
+}
+.cm-nav .ms-btn {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+}
+.cm-status-num {
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+/* ————————————————— fleet museum ————————————————— */
+.mu {
+  display: flex;
+  height: 100%;
+}
+.mu-hall {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  background:
+    repeating-linear-gradient(0deg, var(--bp-grid-minor) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, var(--bp-grid-minor) 0 1px, transparent 1px 8px);
+}
+.mu-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  padding: var(--sp-6) 28px;
+  margin: auto 0;
+}
+.mu-ruler {
+  flex: none;
+}
+.mu-ruler__tick {
+  stroke: var(--line-2);
+  stroke-width: 1;
+}
+.mu-ruler__tick--major {
+  stroke: var(--text-3);
+}
+.mu-ruler__spine {
+  stroke: var(--line-2);
+  stroke-width: 1;
+}
+.mu-ruler__label {
+  fill: var(--text-3);
+  font-size: 9px;
+}
+.mu-plinth {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: none;
+}
+.mu-draw {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.mu-svg {
+  display: block;
+  overflow: visible;
+}
+.mu-sil {
+  fill: rgba(255, 255, 255, 0.03);
+  stroke: var(--bp-edge);
+  stroke-width: var(--bp-stroke-outline);
+  vector-effect: non-scaling-stroke;
+}
+.mu-plinth:hover .mu-sil {
+  stroke: var(--text-1);
+  fill: var(--accent-dim);
+}
+.mu-floor {
+  width: calc(100% + 24px);
+  height: 1px;
+  background: var(--line-2);
+  margin-top: 2px;
+}
+.mu-plaque {
+  margin-top: var(--sp-4);
+  width: 158px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line-1);
+  border-top: 2px solid var(--line-2);
+  border-radius: var(--r-1);
+  background: var(--panel);
+}
+.mu-plaque__name {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-1);
+}
+.mu-plaque__mission {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-top: 1px;
+}
+.mu-plaque__stats {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-2xs);
+  color: var(--text-2);
+}
+/* label left / number right, one pair per row — never wraps mid-pair */
+.mu-plaque__stats > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.mu-plaque__stats dt {
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+}
+.mu-plaque__stats dd {
+  margin: 0;
+  color: var(--text-2);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.mu-plaque__epitaph {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--line-1);
+  font-size: var(--fs-xs);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.mu-empty {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  color: var(--text-3);
+}
+.mu-empty__title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  letter-spacing: 0.2em;
+  color: var(--text-2);
+}
+.mu-empty__sub {
+  font-size: var(--fs-sm);
+  font-style: italic;
+}
+
+/* records board */
+.mu-records {
+  width: 336px;
+  flex: none;
+  border-left: 1px solid var(--line-1);
+  background: var(--bg-1);
+  padding: var(--sp-6);
+  overflow-y: auto;
+  z-index: 15;
+}
+.mu-records__head {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.16em;
+  color: var(--text-3);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--line-1);
+}
+.mu-records__empty {
+  padding-top: var(--sp-5);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--text-3);
+}
+.mu-rec {
+  padding: var(--sp-4) 0 var(--sp-3);
+  border-bottom: 1px solid var(--line-1);
+}
+.mu-rec__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.mu-rec__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+}
+.mu-rec__value {
+  font-size: var(--fs-lg);
+  color: var(--accent);
+  text-shadow: var(--accent-text-glow);
+}
+.mu-rec__holder {
+  margin-top: 2px;
+  font-size: var(--fs-2xs);
+  color: var(--text-2);
+}

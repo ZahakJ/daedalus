@@ -1,0 +1,321 @@
+/* ————— live equations (EqBoard) ————— */
+.eq {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: var(--sp-4) var(--sp-3);
+  font-family: var(--font-ui);
+  font-size: var(--fs-lg);
+  color: var(--text-2);
+  line-height: 1.2;
+  user-select: none;
+}
+
+/* symbol + live value stacked */
+.eq-sym {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 1px 3px;
+  border-radius: var(--r-1);
+  font-style: italic;
+}
+.eq-sym__glyph {
+  font-size: 1em;
+}
+.eq-sym__value {
+  font-style: normal;
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* roles: color is meaning — accent = the variable you control */
+.eq-role-input .eq-sym__glyph {
+  color: var(--accent);
+}
+.eq-role-input .eq-sym__value {
+  color: var(--accent);
+}
+.eq-role-const .eq-sym__glyph {
+  color: var(--text-3);
+}
+.eq-role-derived .eq-sym__glyph {
+  color: var(--text-2);
+}
+.eq-role-derived .eq-sym__value {
+  color: var(--text-2);
+}
+.eq-role-result .eq-sym__glyph {
+  color: var(--text-1);
+}
+.eq-role-result .eq-sym__value {
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+}
+
+/* cross-highlight underlay */
+.eq-bound {
+  cursor: default;
+}
+.eq-hl {
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 1px var(--accent-line);
+}
+
+/* recompute pulse */
+@keyframes eq-pulse-kf {
+  0% {
+    background: var(--accent-dim);
+  }
+  100% {
+    background: transparent;
+  }
+}
+.eq-pulse {
+  animation: eq-pulse-kf 360ms ease-out;
+  border-radius: 2px;
+}
+
+.eq-num {
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+  align-self: center;
+}
+.eq-op {
+  color: var(--text-3);
+  padding: 0 2px;
+  align-self: center;
+}
+
+/* fraction: hairline bar */
+.eq-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+.eq-frac__num,
+.eq-frac__den {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 4px;
+}
+.eq-frac__den {
+  border-top: 1px solid var(--line-2);
+}
+
+/* super/subscripts */
+.eq-supwrap {
+  display: inline-flex;
+  align-items: flex-start;
+}
+.eq-sup {
+  display: inline-flex;
+  font-size: 0.7em;
+  transform: translateY(-0.5em);
+}
+.eq-subscript {
+  font-size: 0.65em;
+  font-style: italic;
+  color: inherit;
+  transform: translateY(0.45em);
+}
+
+/* radical */
+.eq-sqrt {
+  display: inline-flex;
+  align-items: center;
+}
+.eq-sqrt__radical {
+  font-style: normal;
+  font-size: 1.25em;
+  color: var(--text-3);
+  transform: translateY(-0.05em);
+}
+.eq-sqrt__body {
+  display: inline-flex;
+  align-items: center;
+  border-top: 1px solid var(--line-2);
+  padding: 1px 3px 0;
+}
+
+.eq-fn {
+  display: inline-flex;
+  align-items: center;
+}
+.eq-fn__name {
+  font-style: normal;
+  color: var(--text-2);
+  margin-right: 1px;
+}
+.eq-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ————— decision card ————— */
+.dc {
+  background: var(--panel);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  transition: border-color 140ms;
+}
+.dc--active {
+  border-color: var(--accent-line);
+  box-shadow: var(--accent-glow);
+}
+.dc__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line-1);
+  cursor: default;
+}
+.dc__code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.dc__title {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  flex: 1;
+}
+.dc__lesson {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+  cursor: pointer;
+  border: 1px solid var(--line-1);
+  border-radius: 999px;
+  padding: 0 6px;
+  transition: color 120ms, border-color 120ms;
+}
+.dc__lesson:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+.dc__body {
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.dc__margin {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.dc__margin-label {
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--fs-2xs);
+}
+.dc__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.dc__dot--ok {
+  background: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
+}
+.dc__dot--warn {
+  background: var(--warn);
+  box-shadow: 0 0 6px var(--warn);
+}
+.dc__dot--danger {
+  background: var(--danger);
+  box-shadow: 0 0 6px var(--danger);
+}
+.dc__trade {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-2xs);
+}
+.dc__trade-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 72px;
+}
+.dc__trade-side--right {
+  align-items: flex-end;
+  text-align: right;
+}
+.dc__trade-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+.dc__trade-value {
+  font-family: var(--font-mono);
+  color: var(--text-1);
+}
+.dc__trade-bar {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--warn) 0%, var(--line-2) 30%, var(--line-2) 70%, var(--ok) 100%);
+  border-radius: 1px;
+  position: relative;
+}
+.dc__trade-thumb {
+  position: absolute;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--accent-glow);
+  transform: translateX(-50%);
+}
+.dc__why {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  line-height: 1.5;
+}
+.dc__why summary {
+  cursor: pointer;
+  color: var(--text-2);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  list-style: none;
+}
+.dc__why summary::before {
+  content: '▸ ';
+  color: var(--text-3);
+}
+.dc__why[open] summary::before {
+  content: '▾ ';
+}
+
+/* collapsed inherited row */
+.dc--inherited .dc__head {
+  border-bottom: none;
+  cursor: pointer;
+}
+.dc__inherited-summary {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}

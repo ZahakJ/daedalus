@@ -1,0 +1,445 @@
+/* ————— design bureau: three-column instrument layout ————— */
+.bu {
+  display: grid;
+  grid-template-columns: 344px minmax(0, 1fr) 312px;
+  height: 100%;
+  min-height: 0;
+}
+
+/* left: decision cards */
+.bu__cards {
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  border-right: 1px solid var(--line-1);
+  background: var(--bg-1);
+  scroll-behavior: smooth;
+}
+
+.bu-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.bu-group__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.bu-group__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line-1);
+}
+
+/* mastered / collapsed decision rows: keep one line, ellipsize the summary */
+.bu .dc__head {
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.bu .dc__code {
+  white-space: nowrap;
+  flex: none;
+}
+.bu .dc__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bu .dc--inherited .dc__title {
+  flex: none;
+  overflow: visible;
+}
+.bu .dc__inherited-summary {
+  margin-left: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--text-3);
+}
+.bu .dc__lesson {
+  flex: none;
+  white-space: nowrap;
+}
+.bu .dc--inherited:hover .dc__title {
+  color: var(--text-1);
+}
+
+/* flags strip */
+.bu-flags {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.bu-flag {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line-1);
+  border-left-width: 2px;
+  border-radius: var(--r-1);
+  font-size: var(--fs-2xs);
+  line-height: 1.4;
+  color: var(--text-2);
+  background: var(--panel);
+}
+.bu-flag__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transform: translateY(-1px);
+}
+.bu-flag--danger {
+  border-left-color: var(--danger);
+  background: var(--danger-dim);
+}
+.bu-flag--danger .bu-flag__dot {
+  background: var(--danger);
+  box-shadow: 0 0 6px var(--danger);
+}
+.bu-flag--warning {
+  border-left-color: var(--warn);
+  background: var(--warn-dim);
+}
+.bu-flag--warning .bu-flag__dot {
+  background: var(--warn);
+  box-shadow: 0 0 5px var(--warn);
+}
+.bu-flag--info .bu-flag__dot {
+  background: var(--text-3);
+}
+.bu-flag--clear {
+  border-left-color: var(--ok);
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.bu-flag--clear .bu-flag__dot {
+  background: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
+}
+
+/* card internals */
+.bu-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.bu-controls .ms-seg {
+  align-self: flex-start;
+}
+
+.bu-kv {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  font-size: var(--fs-2xs);
+}
+.bu-kv__k {
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.bu-kv__v {
+  color: var(--text-1);
+  font-size: var(--fs-xs);
+}
+
+.bu-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+
+/* cycle comparison table */
+.bu-cycles {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-1);
+  overflow: hidden;
+}
+.bu-cycles__head,
+.bu-cycles__row {
+  display: grid;
+  grid-template-columns: 72px 1fr 0.8fr 0.7fr 0.8fr;
+  gap: var(--sp-2);
+  align-items: baseline;
+  padding: 3px var(--sp-3);
+  font-size: var(--fs-2xs);
+  text-align: right;
+}
+.bu-cycles__head span:first-child,
+.bu-cycles__row span:first-child {
+  text-align: left;
+}
+.bu-cycles__head {
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--line-1);
+  background: var(--bg-2);
+}
+.bu-cycles__row {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line-1);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.bu-cycles__row:last-child {
+  border-bottom: none;
+}
+.bu-cycles__row:hover {
+  background: var(--bg-hover);
+}
+.bu-cycles__row--active {
+  background: var(--accent-dim);
+  color: var(--text-1);
+}
+.bu-cycles__row--active .bu-cycles__name {
+  color: var(--accent);
+}
+.bu-cycles__name {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* center: the drawing */
+.bu__stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--sp-5);
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.015), transparent 70%),
+    var(--bg-0);
+}
+.bu__stage .bp {
+  cursor: crosshair;
+}
+
+/* right: rollups */
+.bu__rollup {
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  border-left: 1px solid var(--line-1);
+  background: var(--bg-1);
+}
+
+.bu-panel {
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  background: var(--panel);
+  overflow: hidden;
+  flex: none;
+}
+.bu-panel--flex {
+  flex: 1 1 auto;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+.bu-panel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--line-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  flex: none;
+}
+.bu-panel__aux {
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--text-3);
+}
+
+/* readout grid */
+.bu-readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4) var(--sp-3);
+  padding: var(--sp-4) var(--sp-4);
+}
+.bu-readouts .ms-stat {
+  padding: 2px 4px;
+  border-radius: var(--r-1);
+}
+.bu-stale-q .ms-stat:nth-child(5) .ms-stat__value {
+  opacity: 0.45;
+  transition: opacity 200ms;
+}
+
+/* mass tree */
+.mt {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: var(--sp-2) var(--sp-2);
+  min-height: 0;
+}
+.mt__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 2px var(--sp-2);
+  font-size: var(--fs-2xs);
+  color: var(--text-2);
+  cursor: default;
+  border-radius: var(--r-1);
+  text-align: left;
+}
+.mt__row--branch {
+  cursor: pointer;
+}
+.mt__row--branch:hover {
+  background: var(--bg-hover);
+}
+.mt__twist {
+  flex: none;
+  width: 10px;
+  color: var(--text-3);
+  font-size: 8px;
+}
+.mt__label {
+  flex: none;
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mt__bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1px;
+  overflow: hidden;
+  min-width: 16px;
+}
+.mt__bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent-line);
+  border-radius: 1px;
+  transition: width 160ms ease-out;
+}
+.mt__mass {
+  flex: none;
+  min-width: 52px;
+  text-align: right;
+  color: var(--text-1);
+  font-size: var(--fs-2xs);
+}
+
+/* trajectory preview */
+.tp {
+  display: flex;
+  flex-direction: column;
+}
+.tp__plot {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 180ms;
+}
+.tp--stale .tp__plot {
+  opacity: 0.35;
+}
+.tp__objectives {
+  border-top: 1px solid var(--line-1);
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.tp-obj {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  color: var(--text-2);
+}
+.tp-obj__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-3);
+  transform: translateY(-1px);
+}
+.tp-obj--pass .tp-obj__dot {
+  background: var(--ok);
+  box-shadow: 0 0 5px var(--ok);
+}
+.tp-obj--fail .tp-obj__dot {
+  background: var(--danger);
+  box-shadow: 0 0 5px var(--danger);
+}
+/* Objective text carries the criterion ("touchdown < 8 m/s") — clipping it to
+   an ellipsis hides the number the player is being judged against, so wrap. */
+.tp-obj__label {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.tp-obj__actual {
+  flex: none;
+  color: var(--text-1);
+}
+.tp-obj--fail .tp-obj__actual {
+  color: var(--danger);
+}
+.tp-obj--pending .tp-obj__actual {
+  color: var(--text-3);
+}
+
+/* FRR button */
+.bu-frr {
+  flex: none;
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+}
+
+/* titlebar goal line */
+.bu-goal {
+  max-width: 46vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}

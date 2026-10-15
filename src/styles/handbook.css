@@ -1,0 +1,403 @@
+/* ————————————————— engineering handbook (hb-) + mini-markdown (md-) ————————————————— */
+
+.hb {
+  display: flex;
+  height: 100%;
+}
+
+/* ————— table of contents ————— */
+.hb-toc {
+  width: 304px;
+  flex: none;
+  border-right: 1px solid var(--line-1);
+  background: var(--bg-1);
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+}
+.hb-toc__cover {
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line-1);
+  padding: var(--sp-4) var(--sp-5);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.2em;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.hb-toc__cover:hover {
+  color: var(--accent);
+}
+.hb-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--line-1);
+}
+.hb-progress__bar {
+  flex: 1;
+  height: 2px;
+  background: var(--line-1);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.hb-progress__fill {
+  height: 100%;
+  background: var(--accent);
+  box-shadow: var(--accent-glow);
+  transition: width 300ms;
+}
+.hb-progress__num {
+  font-size: var(--fs-2xs);
+  color: var(--text-2);
+}
+.hb-toc__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sp-3) 0 var(--sp-6);
+}
+.hb-toc__group {
+  margin-top: var(--sp-4);
+}
+.hb-toc__mission {
+  padding: 0 var(--sp-5) var(--sp-2);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+}
+.hb-toc__entry {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 3px var(--sp-5);
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+  cursor: pointer;
+  transition: background 100ms, border-color 100ms;
+}
+.hb-toc__entry:hover {
+  background: var(--bg-hover);
+}
+.hb-toc__entry--active {
+  border-left-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+.hb-toc__entry--active .hb-toc__num {
+  color: var(--accent);
+}
+.hb-toc__entry--locked {
+  color: var(--text-3);
+  cursor: default;
+}
+.hb-toc__entry--locked:hover {
+  background: none;
+}
+.hb-toc__num {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+  min-width: 30px;
+  flex: none;
+}
+.hb-lock {
+  width: 9px;
+  height: 11px;
+  margin-left: auto;
+  align-self: center;
+  color: var(--text-3);
+  opacity: 0.7;
+  flex: none;
+}
+
+/* ————— the page ————— */
+.hb-page {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* entry: technical-manual typesetting */
+.hb-entry {
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: 56px 40px 96px;
+  animation: ms-fade-in 180ms ease-out;
+}
+.hb-entry__kicker {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+.hb-entry__title {
+  margin: var(--sp-2) 0 0;
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--line-2);
+}
+
+.hb-gov {
+  margin-top: var(--sp-6);
+  border: 1px solid var(--line-1);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--r-2);
+  background: var(--bg-1);
+  padding: var(--sp-4) var(--sp-5);
+}
+.hb-gov__label {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.16em;
+  color: var(--text-3);
+}
+.hb-gov .md-eq {
+  border: none;
+  background: none;
+  margin: var(--sp-2) 0 0;
+  padding: 0;
+}
+.hb-gov .eq {
+  font-size: 22px;
+  padding: var(--sp-3) 0;
+}
+.hb-gov .eq-sym__value {
+  font-size: var(--fs-xs);
+}
+.hb-gov .eq-role-result .eq-sym__value {
+  font-size: var(--fs-md);
+}
+
+.hb-body {
+  margin-top: var(--sp-6);
+}
+.hb-body .md-p {
+  margin: 0 0 1.1em;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-1);
+}
+.hb-body .md-p strong {
+  font-weight: 650;
+}
+.hb-body .md-p em {
+  color: var(--text-2);
+}
+
+.hb-sealed-note {
+  margin-top: var(--sp-6);
+  padding: var(--sp-5);
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-2);
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+}
+.hb-entry--sealed .hb-entry__title {
+  color: var(--text-3);
+}
+.hb-entry--sealed .hb-entry__kicker {
+  color: var(--text-3);
+}
+
+.hb-appears {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-1);
+}
+.hb-appears__label {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.14em;
+  color: var(--text-3);
+  margin-right: var(--sp-2);
+}
+
+.hb-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--line-1);
+}
+.hb-footer__nav {
+  background: none;
+  border: none;
+  padding: var(--sp-2) 0;
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  cursor: pointer;
+  text-align: left;
+}
+.hb-footer__nav--next {
+  text-align: right;
+}
+.hb-footer__nav:hover:not(:disabled) {
+  color: var(--accent);
+}
+.hb-footer__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.hb-footer__nav .mono {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+
+/* ————— cover page ————— */
+.hb-cover {
+  max-width: 76ch;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: ms-fade-in 180ms ease-out;
+}
+.hb-crest {
+  width: 168px;
+  height: 168px;
+  color: var(--text-2);
+}
+.hb-cover__name {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: var(--accent);
+  text-shadow: var(--accent-text-glow);
+}
+.hb-cover__title {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-lg);
+  color: var(--text-1);
+  letter-spacing: 0.08em;
+}
+.hb-cover__ed {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.18em;
+  color: var(--text-3);
+}
+.hb-cover__rule {
+  width: 120px;
+  height: 1px;
+  background: var(--line-2);
+  margin: var(--sp-6) 0;
+}
+.hb-cover__note {
+  max-width: 46ch;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.hb-cover__toc {
+  margin-top: var(--sp-6);
+  width: 100%;
+  columns: 2;
+  column-gap: 48px;
+  text-align: left;
+}
+.hb-cover__group {
+  break-inside: avoid;
+  margin-bottom: var(--sp-5);
+}
+.hb-cover__mission {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--line-1);
+  margin-bottom: var(--sp-2);
+}
+.hb-cover__entry {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 2px 0;
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+  cursor: pointer;
+}
+.hb-cover__entry:hover {
+  color: var(--accent);
+}
+.hb-cover__entry .mono {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+  margin-right: 6px;
+}
+.hb-cover__entry--locked {
+  color: var(--text-3);
+  cursor: default;
+}
+.hb-cover__entry--locked:hover {
+  color: var(--text-3);
+}
+
+/* ————— mini-markdown primitives ————— */
+.md-p {
+  margin: 0 0 1em;
+}
+.md-h {
+  margin: 1.4em 0 0.5em;
+  font-size: var(--fs-md);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.md-list {
+  margin: 0 0 1em;
+  padding-left: 1.2em;
+}
+.md-list li {
+  margin: 0.25em 0;
+  line-height: 1.6;
+}
+.md-code {
+  font-size: 0.88em;
+  background: var(--bg-2);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-1);
+  padding: 0 4px;
+  color: var(--text-1);
+}
+.md-term {
+  display: inline;
+  background: var(--accent-dim);
+  border: none;
+  border-radius: 999px;
+  padding: 0 7px 1px;
+  font-size: 0.86em;
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: box-shadow 120ms;
+}
+.md-term:hover {
+  box-shadow: 0 0 0 1px var(--accent-line);
+}
+.md-eq {
+  margin: var(--sp-4) 0;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-2);
+  background: var(--bg-1);
+  display: flex;
+  justify-content: center;
+}

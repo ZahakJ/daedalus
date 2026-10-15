@@ -1,0 +1,568 @@
+/* ————————————————————————————————————————————————————————————————————————
+   FLIGHT READINESS REVIEW — a signed engineering document, not a form.
+   ———————————————————————————————————————————————————————————————————————— */
+
+.frr-root {
+  height: 100%;
+  overflow-y: auto;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px) 0 0 / 100% 28px,
+    var(--bg-0);
+}
+
+.frr-doc {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-6) 96px;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-1);
+}
+
+/* ————— letterhead ————— */
+.frr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-4);
+  border-bottom: 2px solid var(--line-2);
+  position: relative;
+}
+.frr-head::after {
+  /* double rule — drafting title block */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  border-bottom: 1px solid var(--line-1);
+}
+.frr-head__title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+.frr-head__sub {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.14em;
+  color: var(--text-2);
+}
+.frr-head__sub--dim {
+  color: var(--text-3);
+}
+.frr-head__right {
+  text-align: right;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  line-height: 1.9;
+  white-space: nowrap;
+}
+.frr-head__right span {
+  color: var(--text-1);
+  margin-left: var(--sp-2);
+}
+
+/* ————— summary strip ————— */
+.frr-stats {
+  display: flex;
+  gap: 0;
+  margin: var(--sp-5) 0 var(--sp-6);
+  border: 1px solid var(--line-1);
+  border-radius: var(--r-1);
+  overflow: hidden;
+}
+.frr-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-3) var(--sp-4);
+  border-right: 1px solid var(--line-1);
+  background: var(--bg-1);
+}
+.frr-stat:last-child {
+  border-right: none;
+}
+.frr-stat__label {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+}
+.frr-stat__value {
+  font-size: var(--fs-lg);
+  color: var(--text-1);
+}
+
+/* ————— poll ————— */
+.frr-poll-title {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.28em;
+  color: var(--text-2);
+  margin-bottom: var(--sp-4);
+}
+.frr-section {
+  margin-bottom: var(--sp-5);
+}
+.frr-section__title {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--line-2);
+  margin-bottom: 2px;
+}
+.frr-row {
+  display: grid;
+  grid-template-columns: 116px 1fr 220px 200px 150px;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding: var(--sp-2) var(--sp-2);
+  border-bottom: 1px solid var(--line-1);
+  transition: background 120ms;
+}
+.frr-row:hover {
+  background: var(--bg-hover);
+}
+.frr-row--waived {
+  background: rgba(242, 193, 78, 0.04);
+}
+.frr-row__metric {
+  color: var(--text-1);
+}
+.frr-row__note {
+  display: block;
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+  letter-spacing: 0.02em;
+}
+.frr-row__value {
+  text-align: right;
+  color: var(--text-1);
+  white-space: nowrap;
+}
+.frr-row__criterion {
+  text-align: right;
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.frr-row__action {
+  text-align: right;
+}
+
+.frr-status {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.frr-status__glyph {
+  font-size: 9px;
+  vertical-align: 1px;
+}
+.frr-status--go {
+  color: var(--ok);
+}
+.frr-status--marginal {
+  color: var(--warn);
+}
+.frr-status--nogo {
+  color: var(--danger);
+}
+.frr-status--info {
+  color: var(--text-3);
+}
+
+.frr-waive {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: var(--r-1);
+  border: 1px solid var(--warn);
+  background: var(--warn-dim);
+  color: var(--warn);
+  cursor: pointer;
+  transition: box-shadow 120ms, background 120ms;
+  white-space: nowrap;
+}
+.frr-waive:hover {
+  box-shadow: 0 0 10px rgba(242, 193, 78, 0.25);
+}
+.frr-waive--nogo {
+  border-color: var(--danger);
+  background: var(--danger-dim);
+  color: var(--danger);
+}
+.frr-waive--nogo:hover {
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
+.frr-waive--on {
+  border-color: var(--line-2);
+  background: transparent;
+  color: var(--text-2);
+}
+
+/* ————— sign-off ————— */
+.frr-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-5);
+  border-top: 2px solid var(--line-2);
+}
+.frr-foot__ledger {
+  flex: 1;
+  text-align: center;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.16em;
+  color: var(--text-2);
+}
+.frr-commit {
+  font-family: var(--font-mono);
+  letter-spacing: 0.12em;
+  padding: var(--sp-3) var(--sp-6);
+}
+.frr-bar__poll {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  color: var(--text-2);
+}
+
+/* ————— terminal count overlay ————— */
+.frr-count {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-5);
+  background: rgba(4, 6, 10, 0.92);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  animation: ms-fade-in 220ms ease-out;
+}
+.frr-count__label {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.32em;
+  color: var(--text-2);
+  animation: frr-blink 660ms steps(2, start) infinite;
+}
+.frr-count__t {
+  font-size: 96px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-shadow: 0 0 32px rgba(var(--accent-rgb), 0.45);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.frr-count__chips {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+.frr-count__chip {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.14em;
+  padding: 4px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-1);
+  color: var(--text-3);
+  animation: frr-chip-go 180ms steps(1, end) forwards;
+}
+.frr-count__skip {
+  position: absolute;
+  bottom: 28px;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.18em;
+  color: var(--text-3);
+}
+@keyframes frr-chip-go {
+  to {
+    color: var(--ok);
+    border-color: var(--ok);
+    background: var(--ok-dim);
+  }
+}
+@keyframes frr-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ————————————————————————————————————————————————————————————————————————
+   FLIGHT — range view chrome around the canvas.
+   ———————————————————————————————————————————————————————————————————————— */
+
+.fl-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.fl-main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.fl-stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.fl-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.fl-bar__id {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+}
+
+/* ————— telemetry rail ————— */
+.fl-rail {
+  flex: none;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line-1);
+  background: var(--bg-1);
+  min-height: 0;
+}
+.fl-rail__head {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.18em;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--line-1);
+}
+.fl-rail__win {
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+.fl-strip {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--line-1);
+}
+.fl-strip:last-child {
+  border-bottom: none;
+}
+
+/* ————— event ticker ————— */
+.fl-eventlog {
+  flex: none;
+  display: flex;
+  align-items: stretch;
+  height: 40px;
+  border-top: 1px solid var(--line-1);
+  background: var(--bg-1);
+  min-width: 0;
+}
+.fl-eventlog__title {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-4);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.22em;
+  color: var(--text-3);
+  border-right: 1px solid var(--line-1);
+}
+.fl-eventlog__track {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: 0 var(--sp-5);
+  overflow-x: hidden;
+  min-width: 0;
+}
+.fl-ev {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  transition: opacity 200ms;
+}
+.fl-ev__t {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+.fl-ev--past .fl-ev__label {
+  color: var(--text-1);
+}
+.fl-ev--past .fl-ev__t {
+  color: var(--text-2);
+}
+.fl-ev--next .fl-ev__label {
+  color: var(--text-2);
+}
+.fl-ev--next {
+  padding: 2px 8px;
+  margin: -2px -8px;
+  border-radius: var(--r-1);
+  background: var(--bg-hover);
+}
+.fl-ev--future {
+  opacity: 0.4;
+}
+.fl-ev--future .fl-ev__label {
+  color: var(--text-3);
+}
+.fl-ev__count {
+  color: var(--accent);
+  font-size: var(--fs-2xs);
+}
+.fl-ev--failure .fl-ev__label,
+.fl-ev--failure .fl-ev__t {
+  color: var(--danger);
+}
+.fl-ev--failure.fl-ev--future .fl-ev__label {
+  color: var(--danger);
+  opacity: 0.6;
+}
+.fl-ev__label {
+  max-width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ————— scrub bar ————— */
+.fl-scrub {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: 46px;
+  padding: 0 var(--sp-5);
+  border-top: 1px solid var(--line-1);
+  background: var(--bg-1);
+}
+.fl-scrub__pp {
+  font-size: 10px;
+}
+.fl-scrub__met {
+  font-size: var(--fs-md);
+  color: var(--accent);
+  min-width: 96px;
+  text-align: right;
+}
+.fl-scrub__end {
+  font-size: var(--fs-2xs);
+  color: var(--text-3);
+}
+.fl-scrub__track {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+.fl-scrub__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--line-1);
+}
+.fl-scrub__fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: rgba(var(--accent-rgb), 0.55);
+  transition: width 90ms linear;
+}
+.fl-scrub__pip {
+  position: absolute;
+  top: 50%;
+  width: 1px;
+  height: 10px;
+  margin-top: -5px;
+  background: var(--text-3);
+}
+.fl-scrub__pip--past {
+  background: var(--text-2);
+}
+.fl-scrub__pip--failure {
+  background: var(--danger);
+  height: 14px;
+  margin-top: -7px;
+  width: 2px;
+}
+.fl-scrub__thumb {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 18px;
+  margin: -9px 0 0 -1px;
+  background: var(--accent);
+  box-shadow: var(--accent-glow);
+  transition: left 90ms linear;
+  pointer-events: none;
+}
+
+/* ————— end-of-flight card ————— */
+.fl-endcard {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-6) 40px;
+  background: var(--panel);
+  backdrop-filter: blur(var(--panel-blur));
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-2);
+  animation: ms-slide-up 260ms ease-out;
+}
+.fl-endcard__outcome {
+  font-size: var(--fs-lg);
+  letter-spacing: 0.22em;
+}
+.fl-endcard__outcome--success {
+  color: var(--ok);
+}
+.fl-endcard__outcome--failure {
+  color: var(--danger);
+}
+.fl-endcard__stats {
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.fl-endcard__fail {
+  color: var(--danger);
+}
+.fl-endcard__actions {
+  display: flex;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+.fl-endcard__actions .ms-btn {
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+}

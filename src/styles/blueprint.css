@@ -1,0 +1,31 @@
+/* ————— blueprint drawing ————— */
+.bp {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.bp-part {
+  cursor: pointer;
+}
+.bp-part path {
+  transition: stroke 120ms;
+}
+.bp-dim__label {
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  user-select: none;
+}
+.bp-dim {
+  cursor: default;
+}
+.bp-leader {
+  transition: opacity 160ms;
+  pointer-events: none;
+}
+.bp-marker {
+  pointer-events: none;
+}
+.bp-title {
+  pointer-events: none;
+}

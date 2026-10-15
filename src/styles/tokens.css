@@ -1,0 +1,89 @@
+/* Design tokens — the only place raw values live. Color is reserved for
+   meaning: accent = selection/active/the-thing-you-control, status colors =
+   semantics only. daedalus claims its accent via <body data-app="daedalus">. */
+:root {
+  /* surfaces */
+  --bg-0: #04060a;
+  --bg-1: #090c12;
+  --bg-2: #0d1119;
+  --panel: rgba(9, 12, 18, 0.82);
+  --panel-blur: 8px;
+  --bg-hover: rgba(255, 255, 255, 0.04);
+
+  /* hairlines — neutral; never tinted */
+  --line-1: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.14);
+
+  /* text */
+  --text-1: #e6ebf2;
+  --text-2: #9aa4b2;
+  --text-3: #5c6570;
+
+  /* the one accent (default cyan; daedalus overrides via data-app) */
+  --accent-rgb: 100, 216, 255;
+
+  /* status — semantic only */
+  --ok: #58d5a0;
+  --ok-dim: rgba(88, 213, 160, 0.12);
+  --warn: #f2c14e;
+  --warn-dim: rgba(242, 193, 78, 0.12);
+  --danger: #ff6b6b;
+  --danger-dim: rgba(255, 107, 107, 0.12);
+
+  /* space */
+  --sp-1: 4px;
+  --sp-2: 6px;
+  --sp-3: 8px;
+  --sp-4: 12px;
+  --sp-5: 16px;
+  --sp-6: 24px;
+
+  /* radii — tight, instrument-panel */
+  --r-1: 4px;
+  --r-2: 6px;
+  --r-3: 10px;
+
+  /* type */
+  --fs-2xs: 10px;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 15px;
+  --fs-xl: 19px;
+  --fs-2xl: 26px;
+  --font-ui: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* elevation */
+  --shadow-1: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 16px 48px rgba(0, 0, 0, 0.5);
+
+  /* blueprint drawing — the drafting-table grammar */
+  --bp-grid-minor: rgba(255, 255, 255, 0.03); /* 8px pitch */
+  --bp-grid-major: rgba(255, 255, 255, 0.055); /* every 5th line, 40px */
+  --bp-stroke-outline: 1.5px; /* part silhouettes — color: var(--text-1) */
+  --bp-stroke-edge: 1px; /* internal visible edges */
+  --bp-stroke-fine: 0.75px; /* dims, hatching, hidden lines */
+  --bp-edge: rgba(230, 235, 242, 0.55);
+  --bp-hidden-dash: 4 3; /* hidden edges — color: var(--text-3) */
+  --bp-center-dash: 12 3 2 3; /* centerlines (dash-dot) — var(--text-3) */
+  --bp-hatch: rgba(255, 255, 255, 0.1);
+  --bp-hatch-gap: 4px;
+}
+
+/* Derived accent variables live on body — NOT :root — so they compute on the
+   same element the [data-app] --accent-rgb override targets. Declared on
+   :root they would lock in the default cyan before the override applies. */
+body {
+  --accent: rgb(var(--accent-rgb));
+  --accent-dim: rgba(var(--accent-rgb), 0.12);
+  --accent-line: rgba(var(--accent-rgb), 0.45);
+  --accent-glow: 0 0 12px rgba(var(--accent-rgb), 0.35);
+  --accent-text-glow: 0 0 8px rgba(var(--accent-rgb), 0.45);
+}
+
+/* ignition orange — exhaust and test-stand warning paint; the drawing itself
+   stays neutral grayscale */
+[data-app='daedalus'] {
+  --accent-rgb: 255, 138, 64;
+}
